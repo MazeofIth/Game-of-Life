@@ -1,32 +1,4 @@
 var cells = []
-var ruleset = []
-var w = 10
-var generation = 0
-
-function generate() {
-    nextgen = cells.length 
-    for (let i = 0; i < cells.length; i++) {
-        left = cells[i-1]
-        me = cells[i]
-        right = cells[i+1]
-        nextgen[i] = rules[left, me, right]
-    }
-    cells = nextgen
-    generation += 1
-}
-
-function rules(a, b, c) {
-    s = ""+a+b+c
-    index = parseInt(s)
-    return ruleset[index]
-}
-
-/*for (let i = 0; i < cells.length; i++) {
-    if (cells[i] == 1) {
-        fill(0)
-
-    }
-}*/
 
 canvas = document.getElementById("myCanvas")
 var my_context = canvas.getContext('2d');
@@ -85,7 +57,6 @@ function printMousePos(event) {
 
 canvas.addEventListener("click", printMousePos, true)
 
-//cells = [1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1,1,1,1,1,0,0,1]
 function initRandom() {
 for (var y = 0; y < num_y_cells; y++) {
     cells.push([])
