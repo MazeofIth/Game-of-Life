@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+          <link rel="stylesheet"  href="main.css" />
+  </head>
+<body>
+    <h1>Game of Life</h1>
+    <button class="button-80" role="button" onclick="pause()">Pause</button>
+    <button class="button-80" role="button" onclick="start()">Start</button>
+    <button class="button-80" role="button" onclick="reset()">Reset</button>
+    <button class="button-80" role="button" onclick="resetRandom()">Reset random</button>
+    <!--<div class="slidecontainer">
+
+    <p>Speed (ms):</p>
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+
+</div>-->
+    <canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+        Your browser does not support the HTML5 canvas tag.</canvas>
+        <div class="game"></div>
+        <div class="grid"></div>
+        <div class="grid_section"></div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="main.js"></script>
+        <link rel="stylesheet" href="main.css">
+    </body>
