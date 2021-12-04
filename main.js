@@ -6,21 +6,22 @@ var my_context = canvas.getContext('2d');
 my_context.rect(0, 0, 1000, 1000);
 my_context.stroke();
 my_context.fillStyle = "white";*/
+cell_size = 20
 canvas.width = window.innerWidth-50;
-canvas.width -= canvas.width % 21 
+canvas.width -= canvas.width % cell_size 
 canvas.height = window.innerHeight-150;
-canvas.height -= canvas.height % 21 
+canvas.height -= canvas.height % cell_size 
 
 var xvalue = 0;
 var yvalue = 0;
-var num_y_cells = Math.floor(canvas.height/21)
-var num_x_cells = Math.floor(canvas.width/21)
+var num_y_cells = Math.floor(canvas.height/cell_size)
+var num_x_cells = Math.floor(canvas.width/cell_size)
 
 /*window.addEventListener("resize", function(){
     canvas.setAttribute("width", window.innerWidth-50);
     canvas.setAttribute("height", window.innerHeight-150)
-    num_y_cells = Math.floor(canvas.height/21)
-    num_x_cells = Math.floor(canvas.width/21)
+    num_y_cells = Math.floor(canvas.height/cell_size)
+    num_x_cells = Math.floor(canvas.width/cell_size)
     newcells = []
     for (var y = 0; y < num_y_cells; y++) {
         newcells.push([])
@@ -42,22 +43,48 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }  
 
-function printMousePos(event) {
+mouse_down = false
+
+function printMousePos(event, type) {
+    if (type == "down") {
+        mouse_down = true
+    } else if (type == "up") {
+        mouse_down = false
+    }
+    if (mouse_down) {
     var rect = canvas.getBoundingClientRect();
-    console.log(
-      "clientX: " + event.clientX +
-      " - clientY: " + event.clientY)
     x = event.clientX - rect.left
     y = event.clientY - rect.top
-    y = Math.floor(y/21) 
-    x = Math.floor(event.clientX/21)
+    console.log(x, y)
+    y = Math.floor(y/cell_size)
+    x = Math.floor(x/cell_size)
+    console.log(x, y)
     console.log(x, y)
     cells[y][x] = 1
 }
+}
 
-canvas.addEventListener("click", printMousePos, true)
+function move() {
+    console.log("move")
+}
+
+//canvas.addEventListener("click", printMousePos, true)
+canvas.addEventListener("mousedown", function (e) {
+    printMousePos(e, "down")
+}, true);
+canvas.addEventListener("mouseup", function (e) {
+    printMousePos(e, "up")
+}, true);
+canvas.addEventListener("mousemove", function (e) {
+    printMousePos(e, "move")
+}, true);
+/*canvas.addEventListener("mousedown", printMousePos("down"), true)
+canvas.addEventListener("mouseup", printMousePos("up"), true)
+canvas.addEventListener("mousemove", printMousePos("move"), true)*/
+
 
 function initRandom() {
+    cells = []
 for (var y = 0; y < num_y_cells; y++) {
     cells.push([])
     for (var x = 0; x < num_x_cells; x++) {
@@ -67,6 +94,7 @@ for (var y = 0; y < num_y_cells; y++) {
 }
 
 function initZero() {
+    cells = []
     for (var y = 0; y < num_y_cells; y++) {
         cells.push([])
         for (var x = 0; x < num_x_cells; x++) {
@@ -80,24 +108,28 @@ console.log(cells)
 
 function draw() {
     my_context.clearRect(0, 0, canvas.width, canvas.height);
-    console.log("in draw")
+    //console.log("in draw")
+    isempty = true
 for (var y = 0; y < cells.length; y++) {
   for (var x = 0; x < cells[y].length; x++) {
     if (cells[y][x] == 1) {
-        console.log("in draw black")
         my_context.fillStyle = "black";
         my_context.fillRect(xvalue, yvalue, 20, 20);
+        isempty = false
     } else {
         my_context.fillStyle = "white";
         my_context.fillRect(xvalue, yvalue, 20, 20);
     }
-    xvalue += 21;
+    xvalue += cell_size;
   }
   xvalue = 0;
-  yvalue += 21;
+  yvalue += cell_size;
 }
 xvalue = 0 
 yvalue = 0
+if (isempty) {
+    pause()
+}
 }
 
 function pause() {
@@ -105,14 +137,14 @@ function pause() {
     interval = setInterval(function() {
         draw()
       }, 10);
-    console.log("pause")
+    //console.log("pause")
 }
 
 function start() {
     interval = setInterval(function() {
         nextIter()
         draw()
-      }, 500);
+      }, speed);
 }
 
 function reset() {
@@ -200,14 +232,42 @@ function nextIter() {
     console.log(alive)
   }, 500);*/
 
-speed = 500
+var speed = 100
 
-function changeSpeed() {
+function resetInterval() {
+    clearInterval(interval)
+    interval = setInterval(function() {
+        nextIter()
+        draw()
+      }, speed);
+}
 
+function changeSpeed(value) {
+    console.log("in change speed")
+    speed = value
+    console.log(speed)
+    resetInterval()
+}
+
+function changeSize(value) {
+    console.log("in change size")
+    console.log(value)
+    clearInterval(interval)
+    cell_size = value
+    num_y_cells = Math.floor(canvas.height/cell_size)
+    num_x_cells = Math.floor(canvas.width/cell_size)
+    canvas.width = window.innerWidth-50;
+canvas.width -= canvas.width % cell_size 
+canvas.height = window.innerHeight-150;
+canvas.height -= canvas.height % cell_size 
+    initRandom()
+    console.log(cells)
+    clearInterval(interval)
+    //resetInterval()
 }
 
 var interval = setInterval(function() {
-    nextIter()
+    //nextIter()
     draw()
   }, speed);
 

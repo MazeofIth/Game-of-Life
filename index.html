@@ -4,11 +4,15 @@
           <link rel="stylesheet"  href="main.css" />
   </head>
 <body>
-    <h1>Game of Life</h1>
+    <h1>Conway's Game of Life</h1>
     <button class="button-80" role="button" onclick="pause()">Pause</button>
     <button class="button-80" role="button" onclick="start()">Start</button>
     <button class="button-80" role="button" onclick="reset()">Reset</button>
     <button class="button-80" role="button" onclick="resetRandom()">Reset random</button>
+    <input type="range" value="100" min="0" max="3000" oninput="this.nextElementSibling.value = 'Speed (ms): '+this.value; changeSpeed(this.value)">
+<output>Speed (ms): 100</output>
+<!--<input type="range" value="10" min="1" max="100" oninput="this.nextElementSibling.value = 'Size: '+this.value; changeSize(this.value)">
+<output>Size: 10</output>-->
     <!--<div class="slidecontainer">
 
     <p>Speed (ms):</p>
