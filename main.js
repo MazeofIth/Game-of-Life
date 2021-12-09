@@ -164,6 +164,7 @@ function draw() {
 
 function pause() {
     startbutton = document.getElementsByClassName("start")[0]
+    console.log(darkmode)
     if (!darkmode) {
         startbutton.style.backgroundColor = "white"
         startbutton.style.color = "black"
@@ -226,16 +227,9 @@ function darkMode() {
 
 function start() {
     startbutton = document.getElementsByClassName("start")[0]
-    startbutton.style.backgroundColor = "black"
-    startbutton.style.color = "white"
-    if (!darkmode) {
-        pausebutton.style.backgroundColor = "white"
-        pausebutton.style.color = "black"
-    } else {
-        pausebutton.style.backgroundColor = "black"
-        pausebutton.style.color = "white"
-    }
+    console.log(darkmode)
     pausebutton = document.getElementsByClassName("pause")[0]
+    console.log(pausebutton)
     if (!darkmode) {
         startbutton.style.backgroundColor = "black"
         startbutton.style.color = "white"
@@ -243,9 +237,13 @@ function start() {
         startbutton.style.backgroundColor = "white"
         startbutton.style.color = "black"
     }
-    pausebutton = document.getElementsByClassName("pause")[0]
-    pausebutton.style.backgroundColor = "white"
-    pausebutton.style.color = "black"
+    if (!darkmode) {
+        pausebutton.style.backgroundColor = "white"
+        pausebutton.style.color = "black"
+    } else {
+        pausebutton.style.backgroundColor = "black"
+        pausebutton.style.color = "white"
+    }
     clearInterval(interval)
     interval = setInterval(function () {
         nextIter()
