@@ -1,31 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-          <link rel="stylesheet"  href="main.css" />
-  </head>
+
+<head>
+  <link rel="stylesheet" href="main.css" />
+</head>
+
 <body>
-    <h1>Conway's Game of Life</h1>
-    <button class="button-80" role="button" onclick="pause()">Pause</button>
-    <button class="button-80" role="button" onclick="start()">Start</button>
-    <button class="button-80" role="button" onclick="reset()">Reset</button>
-    <button class="button-80" role="button" onclick="resetRandom()">Reset random</button>
-    <input type="range" value="100" min="0" max="3000" oninput="this.nextElementSibling.value = 'Speed (ms): '+this.value; changeSpeed(this.value)">
-<output>Speed (ms): 100</output>
-<!--<input type="range" value="10" min="1" max="100" oninput="this.nextElementSibling.value = 'Size: '+this.value; changeSize(this.value)">
-<output>Size: 10</output>-->
-    <!--<div class="slidecontainer">
+  <img id="title" src="title.png" width=400px>
+  <br>
+  <button class="button-80 pause" role="button" onclick="pause()">Pause</button>
+  <button class="button-80 start" role="button" onclick="start()">Start</button>
+  <button class="button-80" role="button" onclick="initZero(true)">Reset</button>
+  <button class="button-80" role="button" onclick="initRandom()">Reset random</button>
+  <button class="button-80" role="button" onclick="playSound(); changePlay()">Play sound</button>
+  <button class="button-80" role="button" onclick="darkMode();">Dark mode</button>
+  <button class="button-80" id="dynamiccolor" role="button" onclick="dynamicColor();">Dynamic color change</button>
+  <input class="rangeclass" type="range" value="100" min="0" max="3000"
+    oninput="this.nextElementSibling.value = 'Speed (ms): '+this.value; changeSpeed(this.value)">
+  <output>Delay (ms): 100 | </output>
+  <label for="color">Color 1: </label>
+  <input type="color" id="color" oninput="changeColor()" name="color" value="#000000">
+  <label for="color">Color 2: </label>
+  <input type="color" id="color2" oninput="changeColor()" name="color2" value="#000000">
+  <!--<label for="head">Head</label>
+<label for="color"> Color one: </label>
+<select id="color" name="color">
+    <option selected="">black</option>
+    <option>blue</option>
+    <option>yellow</option>
+    <option>orange</option>
+    <option>red</option>
+    <option>purple</option>
+    <option>green</option>
+    <option>white</option>
+    <option>grey</option>
+    <option>pink</option>
+  </select>
+  <label for="color"> Color two: </label>
+  <select id="color2" name="color2">
+    <option selected="">black</option>
+    <option>blue</option>
+    <option>yellow</option>
+    <option>orange</option>
+  </select>-->
+  <input type="range" value="10" min="1" max="100"
+    oninput="this.nextElementSibling.value = 'Size: '+this.value; changeSize(this.value)">
+  <output>Size: 10</output>
+  <!--<div class="slidecontainer">
 
     <p>Speed (ms):</p>
     <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 
 </div>-->
-    <canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
-        Your browser does not support the HTML5 canvas tag.</canvas>
-        <div class="game"></div>
-        <div class="grid"></div>
-        <div class="grid_section"></div>
+  <canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+  <div class="game"></div>
+  <div class="grid"></div>
+  <div class="grid_section"></div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="main.js"></script>
-        <link rel="stylesheet" href="main.css">
-    </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="main.js"></script>
+  <link rel="stylesheet" href="main.css">
+</body>
