@@ -199,6 +199,7 @@ function darkMode() {
     if (!darkmode) {
         darkmode = true
         document.getElementById("title").src = "darktitle.png"
+        document.getElementById("darkmode").innerHTML = "Light mode"
         document.body.style.backgroundColor = "black"
         document.body.style.background = "black"
         document.body.style.color = "white"
@@ -212,6 +213,7 @@ function darkMode() {
     } else {
         darkmode = false
         document.getElementById("title").src = "title.png"
+        document.getElementById("darkmode").innerHTML = "Dark mode"
         document.body.style.backgroundColor = "white"
         document.body.style.background = "white"
         document.body.style.color = "black"
@@ -318,7 +320,38 @@ console.log("already array: ", already_created_alive_array)*/
 
 var play = false
 function changePlay() {
-    play = true
+    if (!play) {
+        play = true
+        document.getElementById("playsound").innerHTML = "Kill the beat"    
+    } else {
+        play = false
+        document.getElementById("playsound").innerHTML = "Drop the beat"    
+    }
+}
+
+var death_by_overpopulation = 3
+var death_by_underpopulation = 2
+var reproduction = 3
+
+function changeOverpopulation() {
+    death_by_overpopulation = document.getElementById("overpopulation").value
+}
+
+function changeUnderpopulation() {
+    death_by_underpopulation = document.getElementById("underpopulation").value
+}
+
+function changeReproduction() {
+    reproduction = document.getElementById("reproduction").value
+}
+
+function resetRules() {
+    death_by_overpopulation = 3
+    death_by_underpopulation = 2
+    reproduction = 3
+    document.getElementById("reproduction").value = 3
+    document.getElementById("underpopulation").value = 2
+    document.getElementById("overpopulation").value = 3
 }
 
 function nextIter() {
@@ -358,12 +391,12 @@ function nextIter() {
                 //console.log("HERE!")
                 cells[y][x] = 0
             }
-            if (alive_neighbors_array[y][x] < 2) {
+            if (alive_neighbors_array[y][x] < death_by_underpopulation || death_by_overpopulation == 0) {
                 cells[y][x] = 0
-            } else if (alive_neighbors_array[y][x] == 3) {
+            } else if (alive_neighbors_array[y][x] == reproduction) { // 3
                 cells[y][x] = 1
                 //playSound()
-            } else if (alive_neighbors_array[y][x] > 3) {
+            } else if (alive_neighbors_array[y][x] > death_by_overpopulation) { // 3
                 cells[y][x] = 0
             }
         }
@@ -406,7 +439,7 @@ function changeColor() {
 var coloriterations = 0
 function dynamicColor() {
     if (!dynamiccolor) {
-        document.getElementById("dynamiccolor").innerHTML = "Disable dynamic color"
+        document.getElementById("dynamiccolor").innerHTML = "Disable disco"
         dynamiccolor = true
         color = true
         color1value = Math.floor(Math.random() * 16777215);
@@ -419,7 +452,7 @@ function dynamicColor() {
             coloriterations += 1
             console.log(coloriterations)
             console.log(coloriterations % 100)
-            if (coloriterations % 30 == 0) {
+            if (coloriterations % 10 == 0) {
                 colorspeed = colorspeed * 10000
                 changeagain = true
             }
@@ -447,7 +480,7 @@ function dynamicColor() {
             }
         }, speed);
     } else {
-        document.getElementById("dynamiccolor").innerHTML = "Dynamic color change"
+        document.getElementById("dynamiccolor").innerHTML = "Disco mode"
         dynamiccolor = false
         color1 = "black"
         color2 = "black"
@@ -480,6 +513,8 @@ function changeSize(value) {
 var interval = setInterval(function () {
     //nextIter()
     draw()
+    initRandom()
+    start()
 }, speed);
 
 console.log("hello world")
