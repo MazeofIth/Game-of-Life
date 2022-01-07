@@ -6,7 +6,7 @@ var my_context = canvas.getContext('2d');
 my_context.rect(0, 0, 1000, 1000);
 my_context.stroke();
 my_context.fillStyle = "white";*/
-var cell_size = 1
+var cell_size = 10
 canvas.width = window.innerWidth - 50;
 canvas.width -= canvas.width % cell_size
 canvas.height = window.innerHeight - 150;
@@ -43,97 +43,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function getWeightedRandomInt() {
-    rand = Math.random();
-    if (rand > 0.999) {
-        return 1
-    } else {
-        return 0
-    }
-}
-
 mouse_down = false
-
-var darkmode = false
-
-function darkMode() {
-    if (!darkmode) {
-        darkmode = true
-        document.getElementById("title").src = "darktitle.png"
-        document.getElementById("darkmode").innerHTML = "Light mode"
-        document.body.style.backgroundColor = "black"
-        document.body.style.background = "black"
-        document.body.style.color = "white"
-        var elements = document.getElementsByClassName('button-80');
-        for (var i in elements) {
-            if (elements.hasOwnProperty(i)) {
-                elements[i].style.backgroundColor = 'black';
-                elements[i].style.color = 'white';
-            }
-        }
-    } else {
-        darkmode = false
-        document.getElementById("title").src = "title.png"
-        document.getElementById("darkmode").innerHTML = "Dark mode"
-        document.body.style.backgroundColor = "white"
-        document.body.style.background = "white"
-        document.body.style.color = "black"
-        var elements = document.getElementsByClassName('button-80');
-        for (var i in elements) {
-            if (elements.hasOwnProperty(i)) {
-                elements[i].style.backgroundColor = 'white';
-                elements[i].style.color = 'black';
-            }
-        }
-    }
-    for (var y = 0; y < num_y_cells; y++) {
-        for (var x = 0; x < num_x_cells; x++) {
-            if (color) {
-                var random = getRandomInt(2)
-                switch (random) {
-                    case 0:
-                        my_context.fillStyle = color1
-                        break;
-                    case 1:
-                        my_context.fillStyle = color2
-                        break;
-                }
-            }
-            if (!darkmode) {
-                if (cells[num_x_cells * y + x]) {
-                    my_context.fillStyle = "black";
-                } else {
-                    my_context.fillStyle = "white";
-                }
-            } else {
-                if (cells[num_x_cells * y + x]) {
-                    my_context.fillStyle = "white";
-                } else {
-                    my_context.fillStyle = "black";
-                }
-            }
-            my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
-            //my_context.closePath();
-            isempty = false
-            //var anotherEnd = performance.now()
-            //console.log(`Another to doSomething took ${anotherEnd - anotherStart} milliseconds`)
-            //}
-            xvalue += cell_size;
-        }
-        xvalue = 0;
-        yvalue += cell_size;
-    }
-}
-
-startTime = performance.now()
-for (var y = 0; y < 1000000; y++) {
-    //my_context.fillStyle = "white";
-    my_context.fillStyle = "black";
-}
-var endTime = performance.now()
-console.log(`Call to fillstyle took ${endTime - startTime} milliseconds`)
-
-
 
 function printMousePos(event, type) {
     if (type == "down") {
@@ -150,10 +60,10 @@ function printMousePos(event, type) {
         x = Math.floor(x / cell_size)
         console.log(x, y)
         console.log(x, y)
-        console.log("Alive neighbors: ", countNeighbors(cells, x, y), cells[num_x_cells * y + x])
-        if (!cells[num_x_cells * y + x]) {
+        console.log("Alive neighbors: ", countNeighbors(x, y), cells[y][x])
+        if (!cells[y][x]) {
             console.log("change!!!")
-            cells[num_x_cells * y + x] = 1
+            cells[y][x] = 1
         } /*else {
         cells[y][x] = 0
     }*/
@@ -177,46 +87,59 @@ canvas.addEventListener("mousemove", function (e) {
 }, true);
 
 function initRandom() {
-    cells = new Uint8Array(num_y_cells * num_x_cells);
+    cells = []
     for (var y = 0; y < num_y_cells; y++) {
+        cells.push([])
         for (var x = 0; x < num_x_cells; x++) {
-            cells[num_x_cells * (y - 1) + x] = getRandomInt(2)
+            cells[y].push(getRandomInt(2))
         }
     }
     console.log(cells)
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+function initZero(frombutton = false) {
+    cells = []
+    for (var y = 0; y < num_y_cells; y++) {
+        cells.push([])
+        for (var x = 0; x < num_x_cells; x++) {
+            cells[y].push(0)
+        }
     }
-    return color;
+    /*if (frombutton) {
+        already_created_alive_array = createAlreadyArray()
+    }*/
 }
-
-var colors = []
-
-function initColors() {
-    colors = []
-    for (i = 0; i < 8; i++) {
-        colors.push(getRandomColor())
-    }
-    console.log(colors)
-}
+initZero()
+//initRandom()
+console.log(cells)
 
 function draw() {
     var startTime = performance.now()
+    //console.log("in draw")
     isempty = true
     //console.log(cells)
     if (!darkmode) {
         my_context.fillStyle = "white";
+<<<<<<< HEAD
         my_context.fillRect(0, 0, canvas.width, canvas.height);
         my_context.fillStyle = "black";
     } else {
         my_context.fillStyle = "black";
         my_context.fillRect(0, 0, canvas.width, canvas.height);
         my_context.fillStyle = "white";
+=======
+        my_context.beginPath();
+
+        my_context.fillRect(0, 0, canvas.width, canvas.height);
+        my_context.fillStyle = "black";
+        my_context.closePath();
+    } else {
+        my_context.beginPath();
+        my_context.fillStyle = "black";
+        my_context.fillRect(0, 0, canvas.width, canvas.height);
+        my_context.fillStyle = "white";
+        my_context.closePath();
+>>>>>>> parent of 64daeaa... Better colors
     }
     //console.log(cells, num_y_cells, num_x_cells, cell_size, xvalue, yvalue)
     for (var y = 0; y < num_y_cells; y++) {
@@ -234,6 +157,7 @@ function draw() {
                     }
                 }
                 //my_context.strokeRect(xvalue, yvalue, cell_size, cell_size);
+<<<<<<< HEAD
                 my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
                 isempty = false
                 //var anotherEnd = performance.now()
@@ -243,17 +167,39 @@ function draw() {
         }
         xvalue = 0;
         yvalue += cell_size;
+=======
+                //my_context.beginPath();
+                //my_context.drawImage(my_context.canvas,0,0,cell_size,cell_size,x*cell_size, y*cell_size, cell_size, cell_size);
+                //console.log(previous_canvas[y][x])
+                my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
+                /*if (previous_canvas[y][x] != cells[y][x]) {
+                    //console.log(previous_canvas[y][x])
+                    if (previous_canvas[y][x]) {
+                        my_context.fillStyle = "black";
+                    } else {
+                        my_context.fillStyle = "white";
+                    }
+                    my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
+                }*/
+                //my_context.closePath();
+                isempty = false
+                //var anotherEnd = performance.now()
+                //console.log(`Another to doSomething took ${anotherEnd - anotherStart} milliseconds`)
+                //}
+            }
+            xvalue += cell_size;
+        }
+            xvalue = 0;
+            yvalue += cell_size;
+>>>>>>> parent of 64daeaa... Better colors
     }
-
-    black()
-    my_context.fillStyle = "white";
-    // black(true)
-
+    xvalue = 0
+    yvalue = 0
     if (isempty) {
         pause()
     }
     var endTime = performance.now()
-    //console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
+    console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
 }
 
 function pause() {
@@ -287,6 +233,39 @@ function playSound() {
     audio.play();
 }
 
+darkmode = false
+
+function darkMode() {
+    if (!darkmode) {
+        darkmode = true
+        document.getElementById("title").src = "darktitle.png"
+        document.getElementById("darkmode").innerHTML = "Light mode"
+        document.body.style.backgroundColor = "black"
+        document.body.style.background = "black"
+        document.body.style.color = "white"
+        var elements = document.getElementsByClassName('button-80');
+        for (var i in elements) {
+            if (elements.hasOwnProperty(i)) {
+                elements[i].style.backgroundColor = 'black';
+                elements[i].style.color = 'white';
+            }
+        }
+    } else {
+        darkmode = false
+        document.getElementById("title").src = "title.png"
+        document.getElementById("darkmode").innerHTML = "Dark mode"
+        document.body.style.backgroundColor = "white"
+        document.body.style.background = "white"
+        document.body.style.color = "black"
+        var elements = document.getElementsByClassName('button-80');
+        for (var i in elements) {
+            if (elements.hasOwnProperty(i)) {
+                elements[i].style.backgroundColor = 'white';
+                elements[i].style.color = 'black';
+            }
+        }
+    }
+}
 
 function start() {
     startbutton = document.getElementsByClassName("start")[0]
@@ -330,33 +309,40 @@ function start() {
     }
 }*/
 
-function countNeighbors(cell_array, x, y) {
-    let alive_neighbors = 0
-    if (cell_array[num_x_cells * (y - 1) + x] == 1) {
+function countNeighbors(x, y) {
+    alive_neighbors = 0
+    if (cells[y - 1]) {
+        if (cells[y - 1][x] == 1) {
+            alive_neighbors += 1
+        }
+        if (cells[y - 1][x + 1] == 1) {
+            alive_neighbors += 1
+        }
+        if (cells[y - 1][x - 1] == 1) {
+            alive_neighbors += 1
+        }
+    }
+    if (cells[y][x + 1] == 1) {
         alive_neighbors += 1
     }
-    if (cell_array[num_x_cells * (y - 1) + x + 1] == 1) {
+    if (cells[y][x - 1] == 1) {
         alive_neighbors += 1
     }
-    if (cell_array[num_x_cells * (y - 1) + x - 1] == 1) {
-        alive_neighbors += 1
-    }
-    if (cell_array[num_x_cells * y + x + 1] == 1) {
-        alive_neighbors += 1
-    }
-    if (cell_array[num_x_cells * y + x - 1] == 1) {
-        alive_neighbors += 1
-    }
-    if (cell_array[num_x_cells * (y + 1) + x] == 1) {
-        alive_neighbors += 1
-    }
-    if (cell_array[num_x_cells * (y + 1) + x + 1] == 1) {
-        alive_neighbors += 1
-    }
-    if (cell_array[num_x_cells * (y + 1) + x - 1] == 1) {
-        alive_neighbors += 1
+    if (cells[y + 1]) {
+        if (cells[y + 1][x] == 1) {
+            alive_neighbors += 1
+        }
+        if (cells[y + 1][x + 1] == 1) {
+            alive_neighbors += 1
+        }
+        if (cells[y + 1][x - 1] == 1) {
+            alive_neighbors += 1
+        }
     }
     return alive_neighbors
+    /*if (alive_neighbors > 1) {
+        console.log(alive_neighbors)
+    }*/
 }
 
 /*function createAlreadyArray() {
@@ -383,9 +369,9 @@ function changePlay() {
     }
 }
 
-var death_by_overpopulation = 7
+var death_by_overpopulation = 3
 var death_by_underpopulation = 2
-var reproduction = 2
+var reproduction = 3
 
 function changeOverpopulation() {
     death_by_overpopulation = document.getElementById("overpopulation").value
@@ -407,118 +393,29 @@ function resetRules() {
     document.getElementById("underpopulation").value = 2
     document.getElementById("overpopulation").value = 3
 }
-var alive_neighbors_array = new Uint8Array(num_y_cells * num_x_cells);
-
-function bitMap() {
-    var arr = new Uint8Array(num_y_cells * num_x_cells);
-    for (var y = 0; y < 10; y++) {
-        arr[y] = 1
-    }
-    //var Random r = new Random();
-    //r.NextBytes(buffer);
-    console.log(arr[5] & 0x1)
-    console.log(arr)
-}
-bitMap()
-console.log("hello world")
-
-function copy(src) {
-    var dst = new ArrayBuffer(src.byteLength);
-    new Uint8Array(dst).set(new Uint8Array(src));
-    return dst;
-}
-
-function initZero(frombutton = false) {
-    cells = new Uint8Array(num_y_cells * num_x_cells)
-    previous_canvas = JSON.parse(JSON.stringify(cells))
-    my_context.fillStyle = "white";
-
-    my_context.fillRect(0, 0, canvas.width, canvas.height);
-    initColors()
-}
-
-var change_rules_interval;
-var changing_rules = false;
-// Even more generationalization is possible -- alive on 2, 4 (discrete!)
-function changeRules() {
-    var set_interval_speed = 3000
-    function changeInterval() {
-        change_rules_interval = setInterval(() => {
-            console.log(cells.filter(i => i === 1).length < 50)
-            if (cells.filter(i => i === 1).length < 10) {
-                initZero()
-                console.log(cells.filter(i => i === 1).length == 0)
-                set_interval_speed = 300
-                clearInterval(change_rules_interval);
-                changeInterval()
-            } else {
-                clearInterval(change_rules_interval);
-                set_interval_speed = 3000
-                changeInterval()
-            }
-            console.log(set_interval_speed)
-            rand = getRandomInt(3)
-            /*for (var y = 0; y < num_y_cells; y++) {
-                for (var x = 0; x < num_x_cells; x++) {
-                    if (getWeightedRandomInt()) {
-                        cells[int(num_x_cells*num_y_cells/2+y)+x] = 1 
-                    }
-                }
-            }*/
-            for (i = 0; i < 3; i++) {
-                rand_y = getRandomInt(parseInt(num_y_cells/10))+parseInt(num_y_cells/2)
-                rand_x = getRandomInt(parseInt(num_x_cells/10))+parseInt(num_x_cells/2)
-                for (j = 0; j < 5; j++) { 
-                    cells[num_x_cells * (rand_y + getRandomInt(5)) + rand_x + getRandomInt(5)] = 1
-                    cells[num_x_cells * (rand_y + getRandomInt(5)) + rand_x + getRandomInt(5)] = 1
-                    cells[num_x_cells * (rand_y + getRandomInt(5)) + rand_x + getRandomInt(5)] = 1    
-                }
-                //cells[num_x_cells * rand_y + rand_x] = 1
-            }
-            if (rand == 0) {
-                reproduction = getRandomInt(9)
-                document.getElementById("reproduction").value = reproduction
-                //document.getElementById("underpopulation").value = 2
-                //document.getElementById("overpopulation").value = 3        
-            } else if (rand == 1) {
-                underpopulation = getRandomInt(8) + 1
-                document.getElementById("underpopulation").value = underpopulation
-            } else if (rand == 2) {
-                overpopulation = getRandomInt(9)+1
-                document.getElementById("overpopulation").value = overpopulation
-
-            }
-            /*if (cells.filter(i => i === 1).length / (num_x_cells * num_y_cells) > 0.65) {
-                initZero()
-            }*/
-        }, set_interval_speed);
-    }
-    if (!changing_rules) {
-        changeInterval()
-        changing_rules = true
-    } else {
-        clearInterval(change_rules_interval);
-        changing_rules = false
-    }
-}
-
-
-//changeRules()
 
 function nextIter() {
     var startTime = performance.now()
     if (play) {
         playSound()
     }
+<<<<<<< HEAD
     //console.log("in next iter")
     //var alive_neighbors_array = already_created_alive_array
     var alive_neighbors_array = []
+=======
+    //previous_canvas = JSON.parse(JSON.stringify(cells)); // Worked!
+    //console.log("in next iter")
+    //var alive_neighbors_array = already_created_alive_array
+    /*var alive_neighbors_array = []
+>>>>>>> parent of 64daeaa... Better colors
     for (var y = 0; y < num_y_cells; y++) {
         alive_neighbors_array.push([])
         for (var x = 0; x < num_x_cells; x++) {
             alive_neighbors = countNeighbors(x, y)
             alive_neighbors_array[y].push(alive_neighbors)
         }
+<<<<<<< HEAD
     }
     //console.log(num_x_cells, num_y_cells)
     for (var y = 0; y < num_y_cells; y++) {
@@ -529,12 +426,20 @@ function nextIter() {
             }
         }
     }
+=======
+    }*/
+
+>>>>>>> parent of 64daeaa... Better colors
     //console.log(already_created_alive_array)
 
-    previous_canvas = cells.slice(0)
+    //var endTime = performance.now()
+    //console.log(`NextIter to doSomething took ${endTime - startTime} milliseconds`)    
+
+    //console.log(alive_neighbors_array)
 
     for (var y = 0; y < num_y_cells; y++) {
         for (var x = 0; x < num_x_cells; x++) {
+<<<<<<< HEAD
             if (cells[y][x] && alive_neighbors_array[y][x] == 0) {
                 //console.log("HERE!")
                 cells[y][x] = 0
@@ -545,15 +450,32 @@ function nextIter() {
                 cells[y][x] = 1
                 //playSound()
             } else if (alive_neighbors_array[y][x] > death_by_overpopulation) { // 3
+=======
+            alive = countNeighbors(x, y)
+            if (cells[y][x] && alive == 0) {
+                //console.log("HERE!")
+                cells[y][x] = 0
+            }
+            if (alive < death_by_underpopulation || death_by_overpopulation == 0) {
+                cells[y][x] = 0
+            } else if (alive == reproduction) { // 3
+                cells[y][x] = 1
+                //playSound()
+            } else if (alive > death_by_overpopulation) { // 3
+>>>>>>> parent of 64daeaa... Better colors
                 cells[y][x] = 0
             }
         }
     }
     var endTime = performance.now()
+<<<<<<< HEAD
+=======
+    console.log(_.isEqual(previous_canvas, cells))
+>>>>>>> parent of 64daeaa... Better colors
     console.log(`NextIter to doSomething took ${endTime - startTime} milliseconds`)
 }
 
-var speed = 0
+var speed = 100
 
 function resetInterval() {
     clearInterval(interval)
@@ -649,7 +571,6 @@ function changeSize(value) {
     canvas.width -= canvas.width % cell_size
     canvas.height = window.innerHeight - 150;
     canvas.height -= canvas.height % cell_size
-    alive_neighbors_array = new Uint8Array(num_x_cells * num_y_cells)
     initRandom()
     //already_created_alive_array = createAlreadyArray()
     start()
