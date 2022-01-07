@@ -1,7 +1,7 @@
 var cells = []
 
 canvas = document.getElementById("myCanvas")
-var my_context = canvas.getContext('2d', { alpha: false });
+var my_context = canvas.getContext('2d');
 /*my_context.strokeStyle = "white"; // Draws the canvas border
 my_context.rect(0, 0, 1000, 1000);
 my_context.stroke();
@@ -16,10 +16,6 @@ var xvalue = 0;
 var yvalue = 0;
 var num_y_cells = Math.floor(canvas.height / cell_size)
 var num_x_cells = Math.floor(canvas.width / cell_size)
-var previous_canvas = []
-
-my_context.fillStyle = "white";
-my_context.fillRect(0, 0, canvas.width, canvas.height);
 
 /*window.addEventListener("resize", function(){
     canvas.setAttribute("width", window.innerWidth-50);
@@ -212,11 +208,20 @@ function initColors() {
 function draw() {
     var startTime = performance.now()
     isempty = true
-
-    my_context.fillStyle = "black";
-    function black(white = false) {
-        for (var y = 0; y < num_y_cells; y++) {
-            for (var x = 0; x < num_x_cells; x++) {
+    //console.log(cells)
+    if (!darkmode) {
+        my_context.fillStyle = "white";
+        my_context.fillRect(0, 0, canvas.width, canvas.height);
+        my_context.fillStyle = "black";
+    } else {
+        my_context.fillStyle = "black";
+        my_context.fillRect(0, 0, canvas.width, canvas.height);
+        my_context.fillStyle = "white";
+    }
+    //console.log(cells, num_y_cells, num_x_cells, cell_size, xvalue, yvalue)
+    for (var y = 0; y < num_y_cells; y++) {
+        for (var x = 0; x < num_x_cells; x++) {
+            if (cells[y][x] == 1) {
                 if (color) {
                     var random = getRandomInt(2)
                     switch (random) {
@@ -228,61 +233,16 @@ function draw() {
                             break;
                     }
                 }
-                cell = cells[num_x_cells * y + x]
-                if (previous_canvas[num_x_cells * y + x] != cell && ((cell && !white) || (!cell && white))) {
-                    /*if (!darkmode) {
-                        if (cells[num_x_cells * y + x]) {
-                            my_context.fillStyle = "black";
-                        } else {
-                            my_context.fillStyle = "white";
-                        }
-                    } else {
-                        if (cells[num_x_cells * y + x]) {
-                            my_context.fillStyle = "white";
-                        } else {
-                            my_context.fillStyle = "black";
-                        }
-                    }*/
-                    if (cell) {
-                        alive = countNeighbors(cells, x, y)
-                        //my_context.fillStyle = 'rgb('+(alive+1)*20+', '+alive*28+', '+alive*15+')'; //"cyan";
-                        if (!alive) {
-                            my_context.fillStyle = colors[0] // "#ff1493" // pink
-                        }
-                        else if (alive == 1) {
-                            my_context.fillStyle = colors[1] // "#065535" // dark green 
-                        }
-                        else if (alive == 2) {
-                            my_context.fillStyle = colors[2] // '#00ff00'; // neon green
-                        } else if (alive == 3) {
-                            my_context.fillStyle = colors[3] // "#ff80ed"; // pinkpruple 
-                        } else if (alive == 4) {
-                            my_context.fillStyle = colors[4] // "#40e0d0"; // aqua 
-                        } else if (alive == 5) {
-                            my_context.fillStyle = colors[5] // "#800000"; // dark red
-                        } else if (alive == 6) {
-                            my_context.fillStyle = colors[6] // "#800080" // purple
-                        } else if (alive > 7) {
-                            my_context.fillStyle = colors[7] // "#ffd700" // yellow
-                        }
-                        my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
-                        my_context.fillStyle = "black";
-                    } else {
-                        my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
-                    }
-                }
-                //my_context.closePath();
+                //my_context.strokeRect(xvalue, yvalue, cell_size, cell_size);
+                my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
                 isempty = false
                 //var anotherEnd = performance.now()
                 //console.log(`Another to doSomething took ${anotherEnd - anotherStart} milliseconds`)
-                //}
-                xvalue += cell_size;
             }
-            xvalue = 0;
-            yvalue += cell_size;
+            xvalue += cell_size;
         }
-        xvalue = 0
-        yvalue = 0
+        xvalue = 0;
+        yvalue += cell_size;
     }
 
     black()
@@ -416,10 +376,10 @@ var play = false
 function changePlay() {
     if (!play) {
         play = true
-        document.getElementById("playsound").innerHTML = "Kill the beat"
+        document.getElementById("playsound").innerHTML = "Kill the beat"    
     } else {
         play = false
-        document.getElementById("playsound").innerHTML = "Drop the beat"
+        document.getElementById("playsound").innerHTML = "Drop the beat"    
     }
 }
 
@@ -550,27 +510,47 @@ function nextIter() {
     if (play) {
         playSound()
     }
+    //console.log("in next iter")
+    //var alive_neighbors_array = already_created_alive_array
+    var alive_neighbors_array = []
+    for (var y = 0; y < num_y_cells; y++) {
+        alive_neighbors_array.push([])
+        for (var x = 0; x < num_x_cells; x++) {
+            alive_neighbors = countNeighbors(x, y)
+            alive_neighbors_array[y].push(alive_neighbors)
+        }
+    }
+    //console.log(num_x_cells, num_y_cells)
+    for (var y = 0; y < num_y_cells; y++) {
+        for (var x = 0; x < num_x_cells; x++) {
+            alive_neighbors = countNeighbors(x, y)
+            if (alive_neighbors) {
+                alive_neighbors_array[y][x] = alive_neighbors
+            }
+        }
+    }
+    //console.log(already_created_alive_array)
 
     previous_canvas = cells.slice(0)
 
     for (var y = 0; y < num_y_cells; y++) {
         for (var x = 0; x < num_x_cells; x++) {
-            cell = cells[num_x_cells * y + x]
-            //console.log(cell)
-            alive = countNeighbors(previous_canvas, x, y)
-            //console.log(alive)
-            if (alive < death_by_underpopulation && cell || death_by_overpopulation == 0) {
-                cells[num_x_cells * y + x] = 0
-            } else if (alive == reproduction && !cell) { // 3
-                cells[num_x_cells * y + x] = 1
-            } else if (alive > death_by_overpopulation && cell) { // 3
-                cells[num_x_cells * y + x] = 0
+            if (cells[y][x] && alive_neighbors_array[y][x] == 0) {
+                //console.log("HERE!")
+                cells[y][x] = 0
+            }
+            if (alive_neighbors_array[y][x] < death_by_underpopulation || death_by_overpopulation == 0) {
+                cells[y][x] = 0
+            } else if (alive_neighbors_array[y][x] == reproduction) { // 3
+                cells[y][x] = 1
+                //playSound()
+            } else if (alive_neighbors_array[y][x] > death_by_overpopulation) { // 3
+                cells[y][x] = 0
             }
         }
     }
     var endTime = performance.now()
-    //console.log(_.isEqual(previous_canvas, cells))
-    //console.log(`NextIter to doSomething took ${endTime - startTime} milliseconds`)
+    console.log(`NextIter to doSomething took ${endTime - startTime} milliseconds`)
 }
 
 var speed = 0
@@ -681,7 +661,7 @@ function changeSize(value) {
 
 var interval = setInterval(function () {
     //nextIter()
-    //draw()
+    draw()
     initRandom()
     start()
 }, speed);
