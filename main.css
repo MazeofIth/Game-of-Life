@@ -1,5 +1,5 @@
 /* CSS */
-.button-80 {
+.button-80, input {
   background: #fff;
   backface-visibility: hidden;
   border-radius: .375rem;
