@@ -1,25 +1,22 @@
-var cells = []
 
 canvas = document.getElementById("myCanvas")
 var my_context = canvas.getContext('2d', { alpha: false });
-/*my_context.strokeStyle = "white"; // Draws the canvas border
-my_context.rect(0, 0, 1000, 1000);
-my_context.stroke();
-my_context.fillStyle = "white";*/
 var cell_size = 10
+
 canvas.width = window.innerWidth - 50;
 canvas.width -= canvas.width % cell_size
 canvas.height = window.innerHeight - 150;
 canvas.height -= canvas.height % cell_size
+my_context.fillStyle = "white";
+my_context.fillRect(0, 0, canvas.width, canvas.height);
 
 var xvalue = 0;
 var yvalue = 0;
 var num_y_cells = Math.floor(canvas.height / cell_size)
 var num_x_cells = Math.floor(canvas.width / cell_size)
 var previous_canvas = []
-
-my_context.fillStyle = "white";
-my_context.fillRect(0, 0, canvas.width, canvas.height);
+var speed = 100
+var cells = []
 
 /*window.addEventListener("resize", function(){
     canvas.setAttribute("width", window.innerWidth-50);
@@ -56,7 +53,7 @@ function getWeightedRandomInt() {
     }
 }
 
-mouse_down = false
+var mouse_down = false
 
 var darkmode = false
 
@@ -117,27 +114,13 @@ function darkMode() {
                 }
             }
             my_context.fillRect(xvalue, yvalue, cell_size, cell_size);
-            //my_context.closePath();
             isempty = false
-            //var anotherEnd = performance.now()
-            //console.log(`Another to doSomething took ${anotherEnd - anotherStart} milliseconds`)
-            //}
             xvalue += cell_size;
         }
         xvalue = 0;
         yvalue += cell_size;
     }
 }
-
-startTime = performance.now()
-for (var y = 0; y < 1000000; y++) {
-    //my_context.fillStyle = "white";
-    my_context.fillStyle = "black";
-}
-var endTime = performance.now()
-console.log(`Call to fillstyle took ${endTime - startTime} milliseconds`)
-
-
 
 function printMousePos(event, type) {
     if (type == "down") {
@@ -273,9 +256,6 @@ function draw() {
                 }
                 //my_context.closePath();
                 isempty = false
-                //var anotherEnd = performance.now()
-                //console.log(`Another to doSomething took ${anotherEnd - anotherStart} milliseconds`)
-                //}
                 xvalue += cell_size;
             }
             xvalue = 0;
@@ -293,7 +273,7 @@ function draw() {
         pause()
     }
     var endTime = performance.now()
-    //console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
+    console.log(`draw() took ${endTime - startTime} milliseconds`)
 }
 
 function pause() {
@@ -570,10 +550,8 @@ function nextIter() {
     }
     var endTime = performance.now()
     //console.log(_.isEqual(previous_canvas, cells))
-    //console.log(`NextIter to doSomething took ${endTime - startTime} milliseconds`)
+    console.log(`nextIter() took ${endTime - startTime} milliseconds`)
 }
-
-var speed = 100
 
 function resetInterval() {
     clearInterval(interval)
